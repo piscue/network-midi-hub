@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "fabe9cd0c07c2ce2fc454d2026621344c8400590f41f0246a6d2f2f62715ea10"
+            "sha256": "1683942fcd3506677186c03cc27fedf15e5c7a8d4217b955911756a373edfc6c"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -31,6 +31,13 @@
             ],
             "index": "pypi",
             "version": "==1.2.9"
+        },
+        "rtmidi": {
+            "hashes": [
+                "sha256:f1ffd73d6571e6ce2769d77e247523738605a71c32d8f60b56a3b41002d0d54c"
+            ],
+            "index": "pypi",
+            "version": "==2.3.4"
         }
     },
     "develop": {}
