@@ -1,7 +1,4 @@
-FROM python:3.8.6-alpine
-RUN apk add --no-cache --virtual .build-deps \
-    build-base \
-    alsa-lib-dev
+FROM python:3.8.6
 ADD requirements.txt /
 RUN pip install -r /requirements.txt \
  && rm /requirements.txt \
