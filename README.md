@@ -4,11 +4,17 @@
 
 ## Usage
 
+### Client
+
 Docker is not yet an option as this application spawns MIDI ports that are not shared on the host system. Hopefully using pipenv makes it quite portable.
 
 When you have an environment with pipenv you can run it by:
 
-```pipenv run python main.py```
+```pipenv run python client.py```
+
+### Server
+
+```pipenv run python server.py```
 
 ## Pipenv
 
