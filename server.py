@@ -32,8 +32,6 @@ def service_connection(key, mask):
         recv_data = sock.recv(1024)  # Should be ready to read
         if recv_data:
             data.outb += recv_data
-            print(recv_data)
-            print(data.outb)
         else:
             print("closing connection to", data.addr)
             sel.unregister(sock)
