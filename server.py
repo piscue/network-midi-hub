@@ -2,6 +2,7 @@ import argparse
 import sys
 import socket
 import selectors
+import time
 import types
 # share queue or other mechanism to share messages to all the clients minus one
 
@@ -61,6 +62,7 @@ def main():
                     accept_wrapper(key.fileobj)
                 else:
                     service_connection(key, mask)
+            time.sleep(0.002)
     except KeyboardInterrupt:
         print("keyboard interrupt, exiting")
     finally:

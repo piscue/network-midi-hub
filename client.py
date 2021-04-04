@@ -1,5 +1,6 @@
 import sys
 import mido
+import time
 import types
 import socket
 import argparse
@@ -84,6 +85,7 @@ def main():
                 messages_to_send = []
             if not sel.get_map():
                 break
+            time.sleep(0.002)
     except KeyboardInterrupt:
         print("caught keyboard interrupt, exiting")
     finally:
