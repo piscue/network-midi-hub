@@ -13,15 +13,37 @@ All the MIDI messages received on the client, will be forwared to the server and
 
 ### Client
 
+Install pipenv on your system, run a sync:
+
+```
+pipenv sync
+```
+
 When you have an environment with pipenv you can run it by:
 
-```pipenv run python client.py```
+```
+pipenv run python client.py --host SERVER_HOST
+```
+
+if you don't pass the `--host` argument, it will default to localhost (127.0.0.1)
 
 Docker is not yet an option as this application spawns MIDI ports that are not shared on the host system. Hopefully using pipenv makes it quite portable.
 
 ### Server
 
-```pipenv run python server.py```
+```
+pipenv run python server.py
+```
+
+By default it runs on the port 8141 and listen to 0.0.0.0
+
+The server it can also be run on docker
+
+```
+docker build -t network-midi-hub-server .
+docker run -p8141:8141 --rm network-midi-hub-server
+
+```
 
 ## Development
 
