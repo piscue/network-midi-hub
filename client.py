@@ -29,13 +29,13 @@ def start_connection(host, port):
 
 
 def check_multiple_messages(msg):
+    # not optimal regex, just match notes
     pattern = r'(\S*\s\S*=\d*\s\S*=\d*\s\S*=\d*\stime=\d*)'
-    # import pdb; pdb.set_trace()
     matches = re.findall(pattern, msg)
     if len(matches) > 0:
         return matches
     else:
-        return msg
+        return [msg]
 
 
 def parse_received_data(data, messages_to_output):
@@ -54,32 +54,26 @@ def service_connection(key, mask, messages_to_send, messages_to_output):
     data = key.data
     if mask & selectors.EVENT_READ:
         try:
-            recv_data = sock.recv(1024)  # Should be ready to read
+            recv_data = sock.recv(1024)
             if recv_data:
-                print("received", repr(recv_data), "from connection")
+                print("received:", repr(recv_data.decode('utf-8')))
                 messages_to_output = parse_received_data(recv_data,
                                                          messages_to_output)
         except ConnectionResetError as e:
             print(e)
-            # data.recv_total += len(recv_data)
-        # if not recv_data or data.recv_total == data.msg_total:
-        #     print("closing connection")
-        #     sel.unregister(sock)
-        #     sock.close()
     if mask & selectors.EVENT_WRITE:
-        # if not data.outb and data.messages:
-        #     data.outb = data.messages.pop(0)
         if messages_to_send:
             for msg in messages_to_send:
                 data = types.SimpleNamespace(
                     outb=bytes(str(msg), 'utf-8')
                 )
-                print("sending", repr(data.outb), "to connection")
+                print("sending", repr(data.outb.decode('utf-8')))
                 try:
                     sent = sock.send(data.outb)
                     data.outb = data.outb[sent:]
                 except BrokenPipeError as e:
                     print(e)
+                    break
     return messages_to_output
 
 
@@ -94,16 +88,19 @@ def main():
     messages_to_output = []
     try:
         while True:
+            # checking new midi messages on midi_input
             for msg in input_midi.iter_pending():
                 if vars.thru:
                     messages_to_output.append(msg)
                 messages_to_send.append(msg)
+            # sending received messages to midi_output
             if len(messages_to_output) > 0:
                 for message in messages_to_output:
                     output_midi.send(message)
                 messages_to_output = []
 
             events = sel.select(timeout=1)
+            # communication with the server
             for key, mask in events:
                 messages_to_output = service_connection(key,
                                                         mask,

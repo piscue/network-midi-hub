@@ -4,7 +4,6 @@ import socket
 import selectors
 import time
 import types
-# share queue or other mechanism to share messages to all the clients minus one
 
 
 sel = selectors.DefaultSelector()
@@ -25,47 +24,49 @@ def accept_wrapper(sock, sockets):
     events = selectors.EVENT_READ | selectors.EVENT_WRITE
     sel.register(conn, events, data=data)
     sockets.append(conn)
-    print(sockets)
     return sockets
 
+
+def send_to_mix_minus(sock, sockets, data):
+    for socks in sockets:
+        # not sending messages to the sender
+        if socks != sock:
+            data_socks = data
+            try:
+                sent = socks.send(data_socks)
+            except BrokenPipeError as e:
+                print(e)
+    try:
+        # mark data as sent
+        data = data[sent:]
+    except UnboundLocalError as e:
+        pass
+    return data
 
 
 def service_connection(key, mask, sockets):
     sock = key.fileobj
     data = key.data
+    # receive
     if mask & selectors.EVENT_READ:
         try:
             recv_data = sock.recv(1024)  # Should be ready to read
             if recv_data:
-                # data.outb += recv_data
-                # not acumulating data, instead of appending
+                # not acumulating data, just keeping the latest
                 data.outb = recv_data
             else:
                 print("closing connection to", data.addr)
                 sel.unregister(sock)
-                # print(sock)
-                # print(sockets)
                 sock.close()
+                # remove from the pool of clients
                 if sock in sockets:
                     sockets.remove(sock)
         except ConnectionResetError as e:
             print(e)
+    # send
     if mask & selectors.EVENT_WRITE:
         if data.outb:
-            print(data.outb)
-            for socks in sockets:
-                if socks != sock:
-                    data_socks = data.outb
-                    try:
-                        sent = socks.send(data_socks)
-                    except BrokenPipeError as e:
-                        print(e)
-            try:
-                data.outb = data.outb[sent:]
-            except UnboundLocalError as e:
-                # print('failed to mark as sent, probably only one client')
-                # print(e)
-                pass
+            data.outb = send_to_mix_minus(sock, sockets, data.outb)
     return sockets
 
 
@@ -88,6 +89,7 @@ def main():
                     sockets = accept_wrapper(key.fileobj, sockets)
                 else:
                     sockets = service_connection(key, mask, sockets)
+            # avoid cpu burn
             time.sleep(0.002)
     except KeyboardInterrupt:
         print("keyboard interrupt, exiting")
