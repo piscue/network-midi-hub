@@ -1,3 +1,4 @@
+import re
 import sys
 import mido
 import time
@@ -27,15 +28,39 @@ def start_connection(host, port):
     sel.register(sock, events)
 
 
+def check_multiple_messages(msg):
+    pattern = r'(\S*\s\S*=\d*\s\S*=\d*\s\S*=\d*\stime=\d*)'
+    # import pdb; pdb.set_trace()
+    matches = re.findall(pattern, msg)
+    if len(matches) > 0:
+        return matches
+    else:
+        return msg
+
+
+def parse_received_data(data, messages_to_output):
+    try:
+        messages = check_multiple_messages(data.decode('utf-8'))
+        for msg in messages:
+            midi_message = mido.parse_string(msg)
+            messages_to_output.append(midi_message)
+    except ValueError as e:
+        print(e)
+    return messages_to_output
+
+
 def service_connection(key, mask, messages_to_send, messages_to_output):
     sock = key.fileobj
     data = key.data
     if mask & selectors.EVENT_READ:
-        recv_data = sock.recv(1024)  # Should be ready to read
-        if recv_data:
-            print("received", repr(recv_data), "from connection")
-            midi_message = mido.parse_string(recv_data.decode('utf-8'))
-            messages_to_output.append(midi_message)
+        try:
+            recv_data = sock.recv(1024)  # Should be ready to read
+            if recv_data:
+                print("received", repr(recv_data), "from connection")
+                messages_to_output = parse_received_data(recv_data,
+                                                         messages_to_output)
+        except ConnectionResetError as e:
+            print(e)
             # data.recv_total += len(recv_data)
         # if not recv_data or data.recv_total == data.msg_total:
         #     print("closing connection")
@@ -50,9 +75,11 @@ def service_connection(key, mask, messages_to_send, messages_to_output):
                     outb=bytes(str(msg), 'utf-8')
                 )
                 print("sending", repr(data.outb), "to connection")
-                sent = sock.send(data.outb)
-                data.outb = data.outb[sent:]
-                print(data)
+                try:
+                    sent = sock.send(data.outb)
+                    data.outb = data.outb[sent:]
+                except BrokenPipeError as e:
+                    print(e)
     return messages_to_output
 
 
