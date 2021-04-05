@@ -80,8 +80,8 @@ def service_connection(key, mask, messages_to_send, messages_to_output):
 def main():
     vars = get_args()
     host, port = vars.host, vars.port
-    input_midi = mido.open_input('vmidi input', virtual=True)
-    output_midi = mido.open_output('vmidi output', virtual=True)
+    input_midi = mido.open_input('network midi hub input', virtual=True)
+    output_midi = mido.open_output('network midi hub output', virtual=True)
     start_connection(host, int(port))
     data_to_send = []
     messages_to_send = []
