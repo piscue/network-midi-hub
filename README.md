@@ -13,7 +13,13 @@ All the MIDI messages received on the client, will be forwared to the server and
 
 ### Client
 
-Install pipenv on your system, run a sync:
+Install pipenv and pyenv on your system (mac instructions assuming brew installed):
+
+```
+brew install pyenv pipenv
+```
+
+run a sync:
 
 ```
 pipenv sync
