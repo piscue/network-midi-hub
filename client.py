@@ -1,13 +1,13 @@
 import re
-import sys
-import mido
 import time
 import types
 import socket
 import argparse
 import selectors
+import mido
 
 sel = selectors.DefaultSelector()
+
 
 def get_args():
     parser = argparse.ArgumentParser(description='Get vars')
@@ -78,19 +78,18 @@ def service_connection(key, mask, messages_to_send, messages_to_output):
 
 
 def main():
-    vars = get_args()
-    host, port = vars.host, vars.port
+    args = get_args()
+    host, port = args.host, args.port
     input_midi = mido.open_input('network midi hub input', virtual=True)
     output_midi = mido.open_output('network midi hub output', virtual=True)
     start_connection(host, int(port))
-    data_to_send = []
     messages_to_send = []
     messages_to_output = []
     try:
         while True:
             # checking new midi messages on midi_input
             for msg in input_midi.iter_pending():
-                if vars.thru:
+                if args.thru:
                     messages_to_output.append(msg)
                 messages_to_send.append(msg)
             # sending received messages to midi_output
