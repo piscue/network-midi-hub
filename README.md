@@ -58,7 +58,6 @@ docker run -p8141:8141 --rm network-midi-hub-server
 - For now is based in TCP sockets, probably will be more performant in latency using UDP.
 - Midi messages sent on the network to be transformed on the smallest format possible
 - Windows Support: midi ports spawn on windows don't work
-- autoreconnect on broken pipe
 - Fix broken pipes on big messages
 - Refine split messages
 

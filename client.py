@@ -6,6 +6,7 @@ import argparse
 import selectors
 import mido
 
+
 sel = selectors.DefaultSelector()
 
 
@@ -26,6 +27,7 @@ def start_connection(host, port):
     sock.connect_ex(server_addr)
     events = selectors.EVENT_READ | selectors.EVENT_WRITE
     sel.register(sock, events)
+    return sock
 
 
 def check_multiple_messages(msg):
@@ -82,7 +84,7 @@ def main():
     host, port = args.host, args.port
     input_midi = mido.open_input('network midi hub input', virtual=True)
     output_midi = mido.open_output('network midi hub output', virtual=True)
-    start_connection(host, int(port))
+    sock = start_connection(host, int(port))
     messages_to_send = []
     messages_to_output = []
     try:
@@ -101,11 +103,19 @@ def main():
             events = sel.select(timeout=1)
             # communication with the server
             for key, mask in events:
-                messages_to_output = service_connection(key,
-                                                        mask,
-                                                        messages_to_send,
-                                                        messages_to_output)
-                messages_to_send = []
+                try:
+                    messages_to_output = service_connection(key,
+                                                            mask,
+                                                            messages_to_send,
+                                                            messages_to_output)
+                    messages_to_send = []
+                except LookupError or BrokenPipeError as e:
+                    print(e)
+                    print('restarting connection to the server')
+                    print(host, port)
+                    sel.unregister(sock)
+                    sock.close()
+                    sock = start_connection(host, int(port))
             if not sel.get_map():
                 break
             time.sleep(0.002)
