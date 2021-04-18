@@ -30,53 +30,99 @@ def start_connection(host, port):
     return sock
 
 
-def check_multiple_messages(msg):
-    # not optimal regex, just match notes
-    pattern = r'(\S*\s\S*=\d*\s\S*=\d*\s\S*=\d*\stime=\d*)'
-    matches = re.findall(pattern, msg)
+def matches_transport(data):
+    pattern = r'(\[\d\d\d\])'
+    return re.findall(pattern, data)
+
+
+def is_transport(data):
+    matches = matches_transport(data)
     if len(matches) > 0:
-        return matches
+        return True
+    return False
+
+
+def check_multiple_transports(data, msg_list):
+    matches = matches_transport(data)
+    if len(matches) > 0:
+        for msg in matches:
+            msg_list.append(msg)
     else:
-        return [msg]
+        msg_list.append(data)
+    return msg_list
 
 
-def parse_received_data(data, messages_to_output):
+def check_multiple_messages(data, msg_list):
+    pattern = r'(\[\d*,\s\d+,\s\d*\])'
+    matches = re.findall(pattern, data)
+    if len(matches) > 0:
+        for msg in matches:
+            msg_list.append(msg)
+    else:
+        msg_list.append(data)
+    return msg_list
+
+
+def review_data(data):
+    msg_list = []
+    if is_transport(data):
+        msg_list = check_multiple_transports(data, msg_list)
+    msg_list = check_multiple_messages(data, msg_list)
+    return msg_list
+
+
+def midify_msg(msg, output_msgs):
+    mido_msg = mido.Message.from_bytes(eval(msg))
+    str_msg = str(mido_msg)
+    print(f'received: {str_msg}')
+    output_msgs.append(mido_msg)
+    return output_msgs
+
+
+def parse_received_data(data, output_msgs):
     try:
-        messages = check_multiple_messages(data.decode('utf-8'))
-        for msg in messages:
-            midi_message = mido.parse_string(msg)
-            messages_to_output.append(midi_message)
+        data_decoded = repr(data.decode('utf-8'))
+        msg_list = review_data(data_decoded)
+        for msg in msg_list:
+            output_msgs = midify_msg(msg, output_msgs)
     except ValueError as e:
+        # print(f'ValueError: {e}')
+        pass
+    return output_msgs
+
+
+def receive_messages(sock, output_msgs):
+    try:
+        recv_data = sock.recv(1024)
+        if recv_data:
+            output_msgs = parse_received_data(recv_data, output_msgs)
+    except ConnectionResetError as e:
         print(e)
-    return messages_to_output
+    return output_msgs
 
 
-def service_connection(key, mask, messages_to_send, messages_to_output):
+def send_message(msg, data, sock):
+    data = types.SimpleNamespace(
+        outb=bytes(str(msg.bytes()), 'utf-8')
+    )
+    try:
+        sent = sock.send(data.outb)
+        data.outb = data.outb[sent:]
+        print(f'sent: {msg}')
+    except BrokenPipeError as e:
+        print(e)
+
+
+def server_con(key, mask, send_msgs, output_msgs):
     sock = key.fileobj
     data = key.data
     if mask & selectors.EVENT_READ:
-        try:
-            recv_data = sock.recv(1024)
-            if recv_data:
-                print("received:", repr(recv_data.decode('utf-8')))
-                messages_to_output = parse_received_data(recv_data,
-                                                         messages_to_output)
-        except ConnectionResetError as e:
-            print(e)
+        output_msgs = receive_messages(sock, output_msgs)
     if mask & selectors.EVENT_WRITE:
-        if messages_to_send:
-            for msg in messages_to_send:
-                data = types.SimpleNamespace(
-                    outb=bytes(str(msg), 'utf-8')
-                )
-                print("sending", repr(data.outb.decode('utf-8')))
-                try:
-                    sent = sock.send(data.outb)
-                    data.outb = data.outb[sent:]
-                except BrokenPipeError as e:
-                    print(e)
-                    break
-    return messages_to_output
+        if send_msgs:
+            for msg in send_msgs:
+                send_message(msg, data, sock)
+    return output_msgs
 
 
 def main():
@@ -85,30 +131,27 @@ def main():
     input_midi = mido.open_input('network midi hub input', virtual=True)
     output_midi = mido.open_output('network midi hub output', virtual=True)
     sock = start_connection(host, int(port))
-    messages_to_send = []
-    messages_to_output = []
+    send_msgs = []
+    output_msgs = []
     try:
         while True:
             # checking new midi messages on midi_input
             for msg in input_midi.iter_pending():
                 if args.thru:
-                    messages_to_output.append(msg)
-                messages_to_send.append(msg)
+                    output_msgs.append(msg)
+                send_msgs.append(msg)
             # sending received messages to midi_output
-            if len(messages_to_output) > 0:
-                for message in messages_to_output:
+            if len(output_msgs) > 0:
+                for message in output_msgs:
                     output_midi.send(message)
-                messages_to_output = []
+                output_msgs = []
 
             events = sel.select(timeout=1)
             # communication with the server
             for key, mask in events:
                 try:
-                    messages_to_output = service_connection(key,
-                                                            mask,
-                                                            messages_to_send,
-                                                            messages_to_output)
-                    messages_to_send = []
+                    output_msgs = server_con(key, mask, send_msgs, output_msgs)
+                    send_msgs = []
                 except LookupError or BrokenPipeError as e:
                     print(e)
                     print('restarting connection to the server')
