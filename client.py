@@ -127,6 +127,8 @@ def server_con(key, mask, send_msgs, output_msgs):
 
 def main():
     args = get_args()
+    if args.host == '127.0.0.1':
+        args.host = input('Host to connect [127.0.0.1]: ') or '127.0.0.1'
     host, port = args.host, args.port
     input_midi = mido.open_input('network midi hub input', virtual=True)
     output_midi = mido.open_output('network midi hub output', virtual=True)

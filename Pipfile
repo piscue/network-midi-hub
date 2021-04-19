@@ -12,4 +12,6 @@ name = "pypi"
 python_full_version = "3.8"
 
 [dev-packages]
-pylint = "*"
+"pylint" = "*"
+"pyinstaller" = "*"
+"macholib" = "*"
