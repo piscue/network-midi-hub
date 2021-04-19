@@ -62,8 +62,34 @@ docker run -p8141:8141 --rm network-midi-hub-server
 
 The requirements are created using pipenv. In order to use the same environment you can run:
 
-```pipenv sync && pipenv shell```
+```
+pipenv sync && pipenv shell
+```
 
 To update the requirements you can modify the Pipfile and run
 
-```docker run --rm -v `pwd`:/workspace -e PIPENV_PIPFILE=Pipfile 3amigos/pipenv-all bash -c "pipenv lock -r > requirements.txt"```
+```
+docker run --rm \
+-v `pwd`:/workspace \
+-e PIPENV_PIPFILE=Pipfile \
+3amigos/pipenv-all bash -c \
+"pipenv lock -r > requirements.txt && pipenv lock -r --dev > requirements-dev.txt"
+```
+
+### pyinstaller
+
+Setup a Python that has CPython shared-library enabled:
+
+```
+env PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install 3.8.6
+```
+
+go inside the the environment:
+```
+pipenv sync && pipenv shell
+```
+
+create an executable of the client:
+```
+pyinstaller -F --noconfirm --hiddenimport mido.backends.rtmidi client.py
+```
