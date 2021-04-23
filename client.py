@@ -22,10 +22,10 @@ def get_args():
 
 def start_connection(host, port):
     server_addr = (host, port)
-    print(f'starting connection to {server_addr}')
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.setblocking(False)
     sock.connect_ex(server_addr)
+    print(f'connected to {host} on port {port}')
     events = selectors.EVENT_READ | selectors.EVENT_WRITE
     sel.register(sock, events)
     return sock
