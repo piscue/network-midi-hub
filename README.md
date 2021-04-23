@@ -11,8 +11,19 @@ All the MIDI messages received on the client, will be forwared to the server and
 
 ## Usage
 
+TLDR;
+
+If you want to kickstart and run it, just download the binaries and execute them
+
+### Binaries
+
+On the _dist_ folder you have the binaries for Mac (Mojave or higher) and Windows.
+
+Check instructions for the Windows Client, as it needs extra care.
+
 ### Client
 
+#### Non binaries - OSX
 Install pipenv and pyenv on your system (mac instructions assuming brew installed):
 
 ```
@@ -28,10 +39,8 @@ pipenv sync
 When you have an environment with pipenv you can run it by:
 
 ```
-pipenv run python client.py --host SERVER_HOST
+pipenv run python client.py
 ```
-
-if you don't pass the `--host` argument, it will default to localhost (127.0.0.1)
 
 #### Windows Client
 Is not supported to spawn Virtual Midi ports on Windows without the use of third party application. I've found a workaround using [loopMidi](http://www.tobias-erichsen.de/software/loopmidi.html).
@@ -48,12 +57,10 @@ Don't be fooled by inputs and output _dislexia_, If doesn't work at the first ti
 
 The client "autoguess" if it's ran on Windows OS, to switch to this specific configuration.
 
+Check the 'Development instructions' below if you prefer to not run the binaries and use python to setup your environment accordingly.
+
 
 ### Server
-
-```
-pipenv run python server.py
-```
 
 By default it runs on the port 8141 and listen to 0.0.0.0
 
@@ -109,6 +116,8 @@ docker run --rm \
 ```
 
 ### pyinstaller
+
+#### OSX (and presumable Linux):
 
 Setup a Python that has CPython shared-library enabled:
 
