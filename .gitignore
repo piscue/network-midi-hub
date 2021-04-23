@@ -1,1 +1,6 @@
+*.spec
+build
+.cache
 .local
+.DS_Store
+__pycache__
