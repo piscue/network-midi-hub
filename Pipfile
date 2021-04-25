@@ -12,6 +12,8 @@ name = "pypi"
 python_full_version = "3.8"
 
 [dev-packages]
+"flake8" = "*"
 "pylint" = "*"
 "pyinstaller" = "*"
+"pytest" = "*"
 "macholib" = "*"
