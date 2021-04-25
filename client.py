@@ -37,39 +37,27 @@ def matches_transport(data):
     return re.findall(pattern, data)
 
 
-def is_transport(data):
-    matches = matches_transport(data)
-    if len(matches) > 0:
-        return True
-    return False
-
-
-def check_multiple_transports(data, msg_list):
+def check_transports(data, msg_list):
     matches = matches_transport(data)
     if len(matches) > 0:
         for msg in matches:
             msg_list.append(msg)
-    else:
-        msg_list.append(data)
     return msg_list
 
 
-def check_multiple_messages(data, msg_list):
+def check_messages(data, msg_list):
     pattern = r'(\[\d*,\s\d+,\s\d*\])'
     matches = re.findall(pattern, data)
     if len(matches) > 0:
         for msg in matches:
             msg_list.append(msg)
-    else:
-        msg_list.append(data)
     return msg_list
 
 
 def review_data(data):
     msg_list = []
-    if is_transport(data):
-        msg_list = check_multiple_transports(data, msg_list)
-    msg_list = check_multiple_messages(data, msg_list)
+    msg_list = check_transports(data, msg_list)
+    msg_list = check_messages(data, msg_list)
     return msg_list
 
 
@@ -82,10 +70,10 @@ def midify_msg(msg, output_msgs):
 
 
 def parse_received_data(data, output_msgs):
-    try:
-        data_decoded = repr(data.decode('utf-8'))
-        msg_list = review_data(data_decoded)
-        for msg in msg_list:
+    data_decoded = repr(data.decode('utf-8'))
+    msg_list = review_data(data_decoded)
+    for msg in msg_list:
+        try:
             output_msgs = midify_msg(msg, output_msgs)
         except ValueError:
             print(traceback.format_exc())
