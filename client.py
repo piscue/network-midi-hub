@@ -5,6 +5,7 @@ import socket
 import argparse
 import platform
 import selectors
+import traceback
 import mido
 
 
@@ -86,9 +87,9 @@ def parse_received_data(data, output_msgs):
         msg_list = review_data(data_decoded)
         for msg in msg_list:
             output_msgs = midify_msg(msg, output_msgs)
-    except ValueError as e:
-        # print(f'ValueError: {e}')
-        pass
+        except ValueError:
+            print(traceback.format_exc())
+            print(f'msg: : {msg}')
     return output_msgs
 
 
@@ -97,8 +98,8 @@ def receive_messages(sock, output_msgs):
         recv_data = sock.recv(1024)
         if recv_data:
             output_msgs = parse_received_data(recv_data, output_msgs)
-    except ConnectionResetError as e:
-        print(e)
+    except ConnectionResetError:
+        print(traceback.format_exc())
     return output_msgs
 
 
@@ -110,8 +111,8 @@ def send_message(msg, data, sock):
         sent = sock.send(data.outb)
         data.outb = data.outb[sent:]
         print(f'sent: {msg}')
-    except BrokenPipeError as e:
-        print(e)
+    except BrokenPipeError:
+        print(traceback.format_exc())
 
 
 def server_con(key, mask, send_msgs, output_msgs):
@@ -164,8 +165,8 @@ def main():
                 try:
                     output_msgs = server_con(key, mask, send_msgs, output_msgs)
                     send_msgs = []
-                except LookupError or BrokenPipeError as e:
-                    print(e)
+                except (LookupError, BrokenPipeError):
+                    print(traceback.format_exc())
                     print('restarting connection to the server')
                     print(host, port)
                     sel.unregister(sock)
