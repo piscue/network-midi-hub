@@ -1,9 +1,9 @@
 import argparse
-import sys
 import socket
 import selectors
 import time
 import types
+import traceback
 
 
 sel = selectors.DefaultSelector()
@@ -34,13 +34,13 @@ def send_to_mix_minus(sock, sockets, data):
             data_socks = data
             try:
                 sent = socks.send(data_socks)
-            except BrokenPipeError as e:
-                print(e)
+            except BrokenPipeError:
+                print(traceback.format_exc())
     try:
         # mark data as sent
         data = data[sent:]
-    except UnboundLocalError as e:
-        pass
+    except UnboundLocalError:
+        print(traceback.format_exc())
     return data
 
 
@@ -61,8 +61,8 @@ def service_connection(key, mask, sockets):
                 # remove from the pool of clients
                 if sock in sockets:
                     sockets.remove(sock)
-        except ConnectionResetError as e:
-            print(e)
+        except ConnectionResetError:
+            print(traceback.format_exc())
     # send
     if mask & selectors.EVENT_WRITE:
         if data.outb:
