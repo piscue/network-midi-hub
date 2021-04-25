@@ -117,8 +117,17 @@ def server_con(key, mask, send_msgs, output_msgs):
 
 def open_midi_ports():
     if platform.system() == 'Windows':
-        input_midi = mido.open_input('loopMIDI Port In 0')
-        output_midi = mido.open_output('loopMIDI Port Out 2')
+        try:
+            input_midi = mido.open_input('loopMIDI Port In 0')
+            output_midi = mido.open_output('loopMIDI Port Out 2')
+        except OSError:
+            print('failed to open some midi ports')
+            input_ports = mido.get_input_names()
+            input_port = input(f'select input MIDI {input_ports}: ')
+            input_midi = mido.open_input(input_port)
+            output_ports = mido.get_output_names()
+            output_port = input(f'select output MIDI {output_ports}: ')
+            output_midi = mido.open_output(output_port)
     else:
         input_midi = mido.open_input('network midi hub input', virtual=True)
         output_midi = mido.open_output('network midi hub output', virtual=True)
