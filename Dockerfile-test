@@ -1,0 +1,9 @@
+FROM python:3.8.6
+ADD requirements-dev.txt /
+RUN pip install -r /requirements-dev.txt \
+ && rm /requirements-dev.txt \
+ && mkdir -p /app
+ADD server.py client.py Makefile /app
+WORKDIR /app
+HEALTHCHECK CMD ["/usr/bin/python", "-V"]
+ENTRYPOINT ["python", "/app/server.py"]
