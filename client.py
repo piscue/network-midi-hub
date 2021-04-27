@@ -22,13 +22,14 @@ def get_args():
 
 
 def start_connection(host, port):
+    print(f'connecting to {host} on port {port}...', end='')
     server_addr = (host, port)
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     sock.setblocking(False)
     sock.connect_ex(server_addr)
-    print(f'connected to {host} on port {port}')
     events = selectors.EVENT_READ | selectors.EVENT_WRITE
     sel.register(sock, events)
+    print('connected')
     return sock
 
 
@@ -131,15 +132,17 @@ def open_midi_ports():
     else:
         input_midi = mido.open_input('network midi hub input', virtual=True)
         output_midi = mido.open_output('network midi hub output', virtual=True)
+    print(f'MIDI Input: {input_midi.name}')
+    print(f'MIDI Output: {output_midi.name}')
     return input_midi, output_midi
 
 
 def main():
+    input_midi, output_midi = open_midi_ports()
     args = get_args()
     if args.host == '127.0.0.1':
-        args.host = input('Host to connect [127.0.0.1]: ') or '127.0.0.1'
+        args.host = input('Server to connect [127.0.0.1]: ') or '127.0.0.1'
     host, port = args.host, args.port
-    input_midi, output_midi = open_midi_ports()
     sock = start_connection(host, int(port))
     send_msgs = []
     output_msgs = []
