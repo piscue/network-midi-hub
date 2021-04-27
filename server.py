@@ -38,7 +38,8 @@ def send_to_mix_minus(sock, sockets, data):
                 print(traceback.format_exc())
     try:
         # mark data as sent
-        data = data[sent:]
+        if 'sent' in locals():
+            data = data[sent:]
     except UnboundLocalError:
         print(traceback.format_exc())
     return data
