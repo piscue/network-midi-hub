@@ -83,12 +83,9 @@ def parse_received_data(data, output_msgs):
 
 
 def receive_messages(sock, output_msgs):
-    try:
-        recv_data = sock.recv(1024)
-        if recv_data:
-            output_msgs = parse_received_data(recv_data, output_msgs)
-    except ConnectionResetError:
-        print(traceback.format_exc())
+    recv_data = sock.recv(1024)
+    if recv_data:
+        output_msgs = parse_received_data(recv_data, output_msgs)
     return output_msgs
 
 
@@ -96,12 +93,9 @@ def send_message(msg, data, sock):
     data = types.SimpleNamespace(
         outb=bytes(str(msg.bytes()), 'utf-8')
     )
-    try:
-        sent = sock.send(data.outb)
-        data.outb = data.outb[sent:]
-        print(f'sent: {msg}')
-    except BrokenPipeError:
-        print(traceback.format_exc())
+    sent = sock.send(data.outb)
+    data.outb = data.outb[sent:]
+    print(f'sent: {msg}')
 
 
 def server_con(key, mask, send_msgs, output_msgs):
@@ -165,7 +159,10 @@ def main():
                 try:
                     output_msgs = server_con(key, mask, send_msgs, output_msgs)
                     send_msgs = []
-                except (LookupError, BrokenPipeError):
+                except (LookupError,
+                        BrokenPipeError,
+                        ConnectionResetError,
+                        ConnectionRefusedError):
                     print(traceback.format_exc())
                     print('restarting connection to the server')
                     print(host, port)
