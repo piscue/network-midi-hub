@@ -76,6 +76,8 @@ docker run -p8141:8141 --rm network-midi-hub-server
 
 ### TODO
 
+- If a client only receives messages and the server restarts, the client won't know and
+  not restart the connection
 - For now is based in TCP sockets, probably will be more performant in latency using UDP.
 - Still BrokenPipe after massive amounts of midi messages
 - Binary for Raspberry Pi
