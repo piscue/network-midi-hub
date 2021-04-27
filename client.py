@@ -138,11 +138,11 @@ def open_midi_ports():
 
 
 def main():
+    input_midi, output_midi = open_midi_ports()
     args = get_args()
     if args.host == '127.0.0.1':
         args.host = input('Server to connect [127.0.0.1]: ') or '127.0.0.1'
     host, port = args.host, args.port
-    input_midi, output_midi = open_midi_ports()
     sock = start_connection(host, int(port))
     send_msgs = []
     output_msgs = []
