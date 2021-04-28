@@ -119,7 +119,19 @@ docker run --rm \
 
 ### pyinstaller
 
-#### OSX (and presumable Linux):
+#### OSX / Linux:
+
+Linux specific:
+
+```
+# install pyenv build dependencies
+sudo apt-get install -y build-essential libssl-dev zlib1g-dev libbz2-dev \ -->
+libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev \
+xz-utils tk-dev libffi-dev liblzma-dev python-openssl git
+
+# asound libjack libraries
+sudo apt install libasound2-dev libjack-dev
+```
 
 Setup a Python that has CPython shared-library enabled:
 
@@ -129,12 +141,13 @@ env PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install 3.8.6
 
 go inside the the environment:
 ```
-pipenv sync && pipenv shell
+pipenv sync --dev
 ```
 
-create an executable of the client:
+create an executable of the client and server:
 ```
-pyinstaller -F --noconfirm --hiddenimport mido.backends.rtmidi client.py
+pipenv run pyinstaller -F --noconfirm --hiddenimport mido.backends.rtmidi client.py
+pipenv run pyinstaller -F --noconfirm --hiddenimport mido.backends.rtmidi server.py
 ```
 
 #### Windows 10
@@ -148,7 +161,6 @@ pyenv install 3.8.6
 
 go inside the environment, install modules:
 ```
-py -m pipenv --python /Users/Shadow/.pyenv/pyenv-win/versions/3.8.6/python3.exe sync
 py -m pipenv --python /Users/Shadow/.pyenv/pyenv-win/versions/3.8.6/python3.exe shell
 pip install -r .\requirements-dev.txt
 ```
