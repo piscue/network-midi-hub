@@ -1,0 +1,24 @@
+# This workflow will install Python dependencies, run tests and lint with a single version of Python
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
+
+name: Release Raspberry Pi
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  release:
+
+    runs-on: [self-hosted, linux, ARM]
+
+    steps:
+    - name: Setup environment and dependencies
+      run: |
+        pipenv --python /home/pi/.pyenv/versions/3.8.9/bin/python3.8 sync --dev
+    - name: Compile binaries
+      run: |
+        pipenv run pyinstaller -F --noconfirm --hiddenimport mido.backends.rtmidi client.py
+        pipenv run pyinstaller -F --noconfirm --hiddenimport mido.backends.rtmidi server.py
