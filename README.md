@@ -53,7 +53,7 @@ And then setup your DAW/Audio MIDI ports as similar to this:
 
 ![Ableton MIDI Setup](ableton-midi-setup.jpg)
 
-Don't be fooled by inputs and output _dislexia_, If doesn't work at the first time, just switch to the oposite on you application.
+Don't be fooled by inputs and output _dislexia_, If doesn't work at the first time, just switch to the opposite on you application.
 
 The client "autoguess" if it's ran on Windows OS, to switch to this specific configuration.
 
