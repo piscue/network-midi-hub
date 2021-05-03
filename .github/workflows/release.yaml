@@ -20,7 +20,7 @@ jobs:
           brew install pyenv pipenv
       - name: Setup environment and dependencies
         run: |
-          cd network-midi-hub
+          ls -l
           pyenv install 3.8
           pipenv sync --dev
 
