@@ -20,7 +20,6 @@ jobs:
           brew install pyenv pipenv
       - name: Setup environment and dependencies
         run: |
-          ls -l
-          pyenv install 3.8
+          pyenv install 3.8.9
           pipenv sync --dev
 
