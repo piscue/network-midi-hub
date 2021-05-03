@@ -33,6 +33,6 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: network-midi-hub-osx
-          path: network-midi-hub-osx.tgz
+          path: dist/network-midi-hub-osx.tgz
           retention-days: 1
           if-no-files-found: error
