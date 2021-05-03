@@ -45,14 +45,13 @@ jobs:
           fetch-depth: 0
       - name: Install packages
         run: |
-          curl https://pyenv.run | bash
-          apt-get install -y build-essential libssl-dev zlib1g-dev libbz2-dev \
-          libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev \
-          libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev \
-          python-openssl git
-          apt install libasound2-dev libjack-dev
-          apt install pipenv
-          brew install pyenv pipenv
+          curl https://pyenv.run | sudo bash
+          sudo apt-get install -y build-essential libssl-dev zlib1g-dev \
+          libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm \
+          libncurses5-dev libncursesw5-dev xz-utils tk-dev libffi-dev \
+          liblzma-dev python-openssl git
+          sudo apt install libasound2-dev libjack-dev
+          sudo apt install pipenv
       - name: Setup environment and dependencies
         run: |
           env PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install 3.8.9
