@@ -9,7 +9,7 @@ on:
 # Build on the oldest supported images, so we have broader compatibility
 jobs:
   macOS:
-    runs-on: macos-10.14
+    runs-on: macos-10.15
     steps:
       - uses: actions/checkout@v2
         with:
