@@ -30,9 +30,11 @@ jobs:
         run: |
           cd dist
           tar czvf network-midi-hub-osx.tgz client server
+          ls -lha *tgz
+          pwd
       - uses: actions/upload-artifact@v2
         with:
           name: network-midi-hub-osx
-          path: dist/network-midi-hub-osx.tgz
+          path: dist/*.tgz
           retention-days: 1
           if-no-files-found: error
