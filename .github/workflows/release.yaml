@@ -54,6 +54,9 @@ jobs:
           sudo apt install pipenv
       - name: Setup environment and dependencies
         run: |
+          export PATH="/root/.pyenv/bin:$PATH"
+          eval "$(pyenv init -)"
+          eval "$(pyenv virtualenv-init -)"
           env PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install 3.8.9
           pipenv sync --dev
       - name: Create binaries
