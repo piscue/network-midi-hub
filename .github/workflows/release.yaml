@@ -17,6 +17,10 @@ jobs:
       - name: Install brew packages
         run: |
           brew update >/dev/null
-          brew upgrade
           brew install pyenv pipenv
+      - name: Setup environment and dependencies
+        run: |
+          cd network-midi-hub
+          pyenv install 3.8
+          pipenv sync --dev
 
