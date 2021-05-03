@@ -22,8 +22,17 @@ jobs:
         run: |
           env PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install 3.8.9
           pipenv sync --dev
-      - name: Create executables
+      - name: Create binaries
         run: |
           pipenv run pyinstaller -F --noconfirm --hiddenimport mido.backends.rtmidi client.py
           pipenv run pyinstaller -F --noconfirm --hiddenimport mido.backends.rtmidi server.py
+      - name: Upload binaries
+        run: |
+          cd dist
+          tar czvf network-midi-hub-osx.tgz
+      - uses: actions/upload-artifact@v2
+        with:
+          name: network-midi-hub-osx
+          path: build/release/network-midi-hub-osx.tgz
+          retention-days: 1
 
