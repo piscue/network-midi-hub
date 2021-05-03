@@ -30,11 +30,44 @@ jobs:
         run: |
           cd dist
           tar czvf network-midi-hub-osx.tgz client server
-          ls -lha *tgz
-          pwd
       - uses: actions/upload-artifact@v2
         with:
           name: network-midi-hub-osx
+          path: dist/*.tgz
+          retention-days: 1
+          if-no-files-found: error
+
+  linux:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Install packages
+        run: |
+          curl https://pyenv.run | bash
+          apt-get install -y build-essential libssl-dev zlib1g-dev libbz2-dev \
+          libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev \
+          libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev \
+          python-openssl git
+          apt install libasound2-dev libjack-dev
+          apt install pipenv
+          brew install pyenv pipenv
+      - name: Setup environment and dependencies
+        run: |
+          env PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install 3.8.9
+          pipenv sync --dev
+      - name: Create binaries
+        run: |
+          pipenv run pyinstaller -F --noconfirm --hiddenimport mido.backends.rtmidi client.py
+          pipenv run pyinstaller -F --noconfirm --hiddenimport mido.backends.rtmidi server.py
+      - name: Upload binaries
+        run: |
+          cd dist
+          tar czvf network-midi-hub-linux.tgz client server
+      - uses: actions/upload-artifact@v2
+        with:
+          name: network-midi-hub-linux
           path: dist/*.tgz
           retention-days: 1
           if-no-files-found: error
