@@ -45,7 +45,7 @@ jobs:
           fetch-depth: 0
       - name: Install packages
         run: |
-          curl https://pyenv.run | sudo bash
+          curl https://pyenv.run | bash
           sudo apt-get install -y build-essential libssl-dev zlib1g-dev \
           libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm \
           libncurses5-dev libncursesw5-dev xz-utils tk-dev libffi-dev \
@@ -54,7 +54,7 @@ jobs:
           sudo apt install pipenv
       - name: Setup environment and dependencies
         run: |
-          export PATH="/root/.pyenv/bin:$PATH"
+          export PATH="$HOME/.pyenv/bin:$PATH"
           eval "$(pyenv init -)"
           eval "$(pyenv virtualenv-init -)"
           env PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install 3.8.9
