@@ -73,3 +73,14 @@ jobs:
           path: dist/*.tgz
           retention-days: 1
           if-no-files-found: error
+
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Install packages
+        run: |
+          choco install pyenv-win
+          pyenv --version
