@@ -82,7 +82,7 @@ jobs:
           fetch-depth: 0
       - name: Install packages
         run: |
-          choco install pyenv-win pipenv
+          choco install pyenv-win pip
           C:\Users\runneradmin\.pyenv\pyenv-win\bin\pyenv install 3.9.5
       - name: Setup environment and dependencies
         run: |
