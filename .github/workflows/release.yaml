@@ -83,4 +83,4 @@ jobs:
       - name: Install packages
         run: |
           choco install pyenv-win
-          C:\Users\runneradmin\.pyenv\bin\pyenv --version
+          C:\Users\runneradmin\.pyenv\pyenv-win\bin\pyenv --version
