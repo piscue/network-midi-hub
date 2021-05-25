@@ -88,7 +88,7 @@ jobs:
         run: |
           set PYTHON_CONFIGURE_OPTS '--enable-shared'
           C:\Users\runneradmin\.pyenv\pyenv-win\bin\pyenv install 3.9.5
-          pipenv sync --dev
+          pipenv run pip install -r requirements-dev.txt
       - name: Create binaries
         run: |
           pipenv run pyinstaller -F --noconfirm --hiddenimport mido.backends.rtmidi client.py
