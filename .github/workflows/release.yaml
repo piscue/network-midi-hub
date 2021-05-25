@@ -121,13 +121,13 @@ jobs:
           echo "TAG_NAME=b${TAG_NAME}" >> $GITHUB_ENV
       - if: github.event_name == 'pull_request'
         run: |
-          TAG_NAME=${{ github.run_number }}
-          echo "TAG_NAME=b${TAG_NAME}" >> $GITHUB_ENV
-      - if: env.TAG_NAME == 'nightly'
+          TAG_NAME=${{ github.head_ref }}
+          echo "TAG_NAME=${TAG_NAME}" >> $GITHUB_ENV
+      - if: env.TAG_NAME == github.head_ref
         run: echo 'SUBJECT=network-midi-hub (prerelease) build' >> $GITHUB_ENV
-      - if: env.TAG_NAME != 'nightly'
+      - if: env.TAG_NAME != github.head_ref
         run: echo 'SUBJECT=network-midi-hub release build' >> $GITHUB_ENV
-      - if: env.TAG_NAME == 'nightly'
+      - if: env.TAG_NAME == github.head_ref
         uses: dev-drprasad/delete-tag-and-release@v0.1.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -139,10 +139,10 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ env.TAG_NAME }}
           name: ${{ needs.linux.outputs.release }}
-          prerelease: ${{ env.TAG_NAME == 'nightly' }}
+          prerelease: ${{ env.TAG_NAME == github.head_ref }}
           commitish: ${{ github.sha }}
           gzip: false
-          allow_override: ${{ env.TAG_NAME == 'nightly' }}
+          allow_override: ${{ env.TAG_NAME == github.head_ref }}
           files: |
             network-midi-hub-linux.tgz:./network-midi-hub-linux/network-midi-hub-linux.tgz
             network-midi-hub-osx.tgz:./network-midi-hub-osx/network-midi-hub-osx.tgz
