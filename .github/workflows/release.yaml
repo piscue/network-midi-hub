@@ -117,8 +117,12 @@ jobs:
         run: echo 'TAG_NAME=nightly' >> $GITHUB_ENV
       - if: github.event_name == 'push'
         run: |
-          TAG_NAME=${{ github.ref }}
-          echo "TAG_NAME=${TAG_NAME#refs/tags/}" >> $GITHUB_ENV
+          TAG_NAME=${{ github.sha }}
+          echo "TAG_NAME=${TAG_NAME}" >> $GITHUB_ENV
+      - if: github.event_name == 'pull_request'
+        run: |
+          TAG_NAME=${{ github.sha }}
+          echo "TAG_NAME=${TAG_NAME}" >> $GITHUB_ENV
       - if: env.TAG_NAME == 'nightly'
         run: echo 'SUBJECT=network-midi-hub (prerelease) build' >> $GITHUB_ENV
       - if: env.TAG_NAME != 'nightly'
