@@ -103,3 +103,45 @@ jobs:
           path: dist/*.tgz
           retention-days: 1
           if-no-files-found: error
+
+  publish:
+    needs: [linux,  macOS, windows]
+    runs-on: ubuntu-20.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v2
+      - if: github.event_name == 'workflow_dispatch'
+        run: echo "TAG_NAME=${{ github.event.inputs.tag_name }}" >> $GITHUB_ENV
+      - if: github.event_name == 'schedule'
+        run: echo 'TAG_NAME=nightly' >> $GITHUB_ENV
+      - if: github.event_name == 'push'
+        run: |
+          TAG_NAME=${{ github.ref }}
+          echo "TAG_NAME=${TAG_NAME#refs/tags/}" >> $GITHUB_ENV
+      - if: env.TAG_NAME == 'nightly'
+        run: echo 'SUBJECT=network-midi-hub (prerelease) build' >> $GITHUB_ENV
+      - if: env.TAG_NAME != 'nightly'
+        run: echo 'SUBJECT=network-midi-hub release build' >> $GITHUB_ENV
+      - if: env.TAG_NAME == 'nightly'
+        uses: dev-drprasad/delete-tag-and-release@v0.1.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          delete_release: true
+          tag_name: nightly
+      - uses: meeDamian/github-release@2.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ env.TAG_NAME }}
+          name: ${{ needs.linux.outputs.release }}
+          prerelease: ${{ env.TAG_NAME == 'nightly' }}
+          commitish: ${{ github.sha }}
+          gzip: false
+          allow_override: ${{ env.TAG_NAME == 'nightly' }}
+          files: |
+            network-midi-hub-linux.tgz:./network-midi-hub-linux/network-midi-hub-linux.tgz
+            network-midi-hub-macos.tgz:./network-midi-hub-macos/network-midi-hub-macos.tgz
+            network-midi-hub-windows.tgz:./network-midi-hub-windows/network-midi-hub-windows.tgz
+          body: |
+            ${{ env.SUBJECT }}
