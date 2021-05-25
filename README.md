@@ -76,28 +76,7 @@ docker run -p8141:8141 --rm network-midi-hub-server
 
 ### TODO
 
-- If a client only receives messages and the server restarts, the client won't know and
-  not restart the connection
-- For now is based in TCP sockets, probably will be more performant in latency using UDP.
-- Still BrokenPipe after massive amounts of midi messages
-- Binary for Raspberry Pi
-- Better Windows Support: midi ports spawn on windows don't work
-
-```
-			PS C:\Users\User\git\network-midi-hub\dist> .\client.exe
-Host to connect [127.0.0.1]: 
-Traceback (most recent call last):
-  File "client.py", line 174, in <module>
-  File "client.py", line 133, in main
-  File "mido\backends\backend.py", line 91, in open_input
-  File "mido\ports.py", line 161, in __init__
-  File "mido\ports.py", line 86, in __init__
-  File "mido\backends\rtmidi.py", line 124, in _open
-  File "mido\backends\rtmidi.py", line 80, in _open_port
-  File "src\_rtmidi.pyx", line 642, in rtmidi._rtmidi.MidiBase.open_virtual_port
-NotImplementedError: Virtual ports are not supported by the Windows MultiMedia API.
-[12736] Failed to execute script client
-```
+[See Issues](https://github.com/piscue/network-midi-hub/issues)
 
 ### Pipenv
 
