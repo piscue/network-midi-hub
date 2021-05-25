@@ -83,8 +83,23 @@ jobs:
       - name: Install packages
         run: |
           choco install --allow-empty-checksums pyenv-win pip
-          C:\Users\runneradmin\.pyenv\pyenv-win\bin\pyenv install 3.9.5
           pip install pipenv
       - name: Setup environment and dependencies
         run: |
+          set PYTHON_CONFIGURE_OPTS '--enable-shared'
+          C:\Users\runneradmin\.pyenv\pyenv-win\bin\pyenv install 3.9.5
           pipenv sync --dev
+      - name: Create binaries
+        run: |
+          pipenv run pyinstaller -F --noconfirm --hiddenimport mido.backends.rtmidi client.py
+          pipenv run pyinstaller -F --noconfirm --hiddenimport mido.backends.rtmidi server.py
+      - name: Upload binaries
+        run: |
+          cd dist
+          tar czvf network-midi-hub-windows.tgz *.exe
+      - uses: actions/upload-artifact@v2
+        with:
+          name: network-midi-hub-windows
+          path: dist/*.tgz
+          retention-days: 1
+          if-no-files-found: error
