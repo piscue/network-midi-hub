@@ -145,7 +145,7 @@ jobs:
           allow_override: ${{ env.TAG_NAME == 'nightly' }}
           files: |
             network-midi-hub-linux.tgz:./network-midi-hub-linux/network-midi-hub-linux.tgz
-            network-midi-hub-macos.tgz:./network-midi-hub-macos/network-midi-hub-macos.tgz
+            network-midi-hub-osx.tgz:./network-midi-hub-osx/network-midi-hub-osx.tgz
             network-midi-hub-windows.tgz:./network-midi-hub-windows/network-midi-hub-windows.tgz
           body: |
             ${{ env.SUBJECT }}
