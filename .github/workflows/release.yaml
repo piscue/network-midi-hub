@@ -85,6 +85,8 @@ jobs:
           choco install --allow-empty-checksums pyenv-win pip
           C:\Users\runneradmin\.pyenv\pyenv-win\bin\pyenv install 3.9.5
           pip install --user pipenv
+          ls -r c:\hostedtoolcache\windows\python\
+          ls -r c:\hostedtoolcache\windows\python\3.7.9\x64\
       - name: Setup environment and dependencies
         run: |
           pipenv sync --dev
