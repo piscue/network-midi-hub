@@ -20,7 +20,7 @@ jobs:
           brew install pyenv pipenv
       - name: Setup environment and dependencies
         run: |
-          env PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install 3.11.0
+          env PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install 3.10.6
           pipenv sync --dev
       - name: Create binaries
         run: |
@@ -57,7 +57,7 @@ jobs:
           export PATH="$HOME/.pyenv/bin:$PATH"
           eval "$(pyenv init -)"
           eval "$(pyenv virtualenv-init -)"
-          env PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install 3.11.0
+          env PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install 3.10.6
           pipenv sync --dev
       - name: Create binaries
         run: |
@@ -87,7 +87,7 @@ jobs:
       - name: Setup environment and dependencies
         run: |
           set PYTHON_CONFIGURE_OPTS '--enable-shared'
-          C:\Users\runneradmin\.pyenv\pyenv-win\bin\pyenv install 3.11.0
+          C:\Users\runneradmin\.pyenv\pyenv-win\bin\pyenv install 3.10.6
           pipenv run pip install -r requirements-dev.txt
       - name: Create binaries
         run: |
