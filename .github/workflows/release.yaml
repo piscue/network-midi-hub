@@ -52,6 +52,7 @@ jobs:
           liblzma-dev python-openssl git
           sudo apt install libasound2-dev libjack-dev
           sudo apt install pipenv
+          pip install --upgrade pip
       - name: Setup environment and dependencies
         run: |
           export PATH="$HOME/.pyenv/bin:$PATH"
@@ -83,7 +84,6 @@ jobs:
       - name: Install packages
         run: |
           choco install --allow-empty-checksums pyenv-win pip
-          pip install --upgrade pip
           pip install pipenv
       - name: Setup environment and dependencies
         run: |
