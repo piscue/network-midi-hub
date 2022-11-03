@@ -58,7 +58,7 @@ jobs:
           export PATH="$HOME/.pyenv/bin:$PATH"
           eval "$(pyenv init -)"
           eval "$(pyenv virtualenv-init -)"
-          env PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install 3.9.13
+          env PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install 3.9.9
           pipenv sync --dev
       - name: Create binaries
         run: |
