@@ -14,7 +14,7 @@ argparse==1.4.0
 astroid==2.12.12; python_full_version >= '3.7.2'
 attrs==22.1.0; python_version >= '3.5'
 dill==0.3.6; python_version >= '3.7'
-exceptiongroup==1.0.0; python_version < '3.11'
+exceptiongroup==1.0.1; python_version < '3.11'
 flake8==5.0.4
 iniconfig==1.1.1
 isort==5.10.1; python_version < '4.0' and python_full_version >= '3.6.1'
@@ -23,12 +23,12 @@ macholib==1.16.2
 mccabe==0.7.0; python_version >= '3.6'
 mido==1.2.10
 packaging==21.3; python_version >= '3.6'
-platformdirs==2.5.2; python_version >= '3.7'
+platformdirs==2.5.3; python_version >= '3.7'
 pluggy==1.0.0; python_version >= '3.6'
 pycodestyle==2.9.1; python_version >= '3.6'
 pyflakes==2.5.0; python_version >= '3.6'
-pyinstaller-hooks-contrib==2022.11; python_version >= '3.7'
-pyinstaller==5.6.1
+pyinstaller-hooks-contrib==2022.13; python_version >= '3.7'
+pyinstaller==5.6.2
 pylint==2.15.5
 pyparsing==3.0.9; python_full_version >= '3.6.8'
 pytest==7.2.0
