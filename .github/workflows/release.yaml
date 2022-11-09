@@ -91,6 +91,7 @@ jobs:
         run: |
           set PYTHON_CONFIGURE_OPTS '--enable-shared'
           C:\Users\runneradmin\.pyenv\pyenv-win\bin\pyenv install 3.9.12
+          refreshenv
           pipenv run pip install -r requirements-dev.txt
       - name: Create binaries
         run: |
