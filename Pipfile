@@ -9,7 +9,7 @@ name = "pypi"
 "argparse" = "*"
 
 [requires]
-python_full_version = "3.9.12"
+python_full_version = "3.9.5"
 
 [dev-packages]
 "flake8" = "*"
