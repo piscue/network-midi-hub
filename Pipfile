@@ -4,16 +4,16 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-"mido" = "*"
-"python-rtmidi" = "*"
-"argparse" = "*"
+"mido" = "1.2.9"
+"python-rtmidi" = "1.4.7"
+"argparse" = "1.4.0"
 
 [requires]
-python_full_version = "3.9.5"
+python_full_version = "3.8.6"
 
 [dev-packages]
-"flake8" = "*"
-"pylint" = "*"
-"pyinstaller" = "*"
+"flake8" = "3.9.1"
+"pylint" = "2.8.1"
+"pyinstaller" = "4.3"
 "pytest" = "*"
-"macholib" = "*"
+"macholib" = "1.14"
