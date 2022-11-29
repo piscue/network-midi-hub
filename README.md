@@ -91,7 +91,7 @@ To update the requirements you can modify the Pipfile and run
 ```
 pipenv lock --python 3.8 -d
 pipenv requirements > requirements.txt
-pipenv requirements --dev-only > requirements.txt
+pipenv requirements --dev-only > requirements-dev.txt
 ```
 
 ### pyinstaller
