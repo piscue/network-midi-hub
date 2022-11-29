@@ -89,11 +89,9 @@ pipenv sync && pipenv shell
 To update the requirements you can modify the Pipfile and run
 
 ```
-docker run --rm \
--v `pwd`:/workspace \
--e PIPENV_PIPFILE=Pipfile \
-3amigos/pipenv-all bash -c \
-"pipenv lock -r > requirements.txt && pipenv lock -r --dev > requirements-dev.txt"
+pipenv lock --python 3.8 -d
+pipenv requirements > requirements.txt
+pipenv requirements --dev-only > requirements.txt
 ```
 
 ### pyinstaller
