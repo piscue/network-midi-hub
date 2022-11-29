@@ -89,7 +89,7 @@ pipenv sync && pipenv shell
 To update the requirements you can modify the Pipfile and run
 
 ```
-pipenv lock --python 3.8 -d
+pipenv lock --python 3.9.5 -d
 pipenv requirements > requirements.txt
 pipenv requirements --dev-only > requirements.txt
 ```
@@ -113,7 +113,7 @@ sudo apt install libasound2-dev libjack-dev
 Setup a Python that has CPython shared-library enabled:
 
 ```
-env PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install 3.8.6
+env PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install 3.9.5
 ```
 
 go inside the the environment:
@@ -133,12 +133,12 @@ Install pyenv-win and pipenv
 Setup a Python that has CPython shared-library enabled:
 ```
 set PYTHON_CONFIGURE_OPTS '--enable-shared'
-pyenv install 3.8.6
+pyenv install 3.9.5
 ```
 
 go inside the environment, install modules:
 ```
-py -m pipenv --python /Users/Shadow/.pyenv/pyenv-win/versions/3.8.6/python3.exe shell
+py -m pipenv --python /Users/Shadow/.pyenv/pyenv-win/versions/3.9.5/python3.exe shell
 pip install -r .\requirements-dev.txt
 ```
 
