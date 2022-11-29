@@ -1,4 +1,4 @@
 -i https://pypi.python.org/simple
 argparse==1.4.0
-mido==1.2.9
-python-rtmidi==1.4.7
+mido==1.2.10
+python-rtmidi==1.4.9
