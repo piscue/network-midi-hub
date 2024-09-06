@@ -83,6 +83,7 @@ jobs:
       - name: Install packages
         run: |
           choco install --allow-empty-checksums pyenv-win pip
+          choco install python --version=3.8.10
           pip install pipenv
       - name: Setup environment and dependencies
         run: |
