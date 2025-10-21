@@ -5,7 +5,7 @@ A client/server interface to connect multiple clients to a centralized MIDI serv
 
 ![Midi Hub Diagram 1](midi-hub-diagram.jpg)
 
-All the MIDI messages received on the client, will be forwared to the server and that will be retransmitted to all the connected clients minus the sender. Locally the client spawn a virtual midi device to allow easy connection with any compatible midi app (DAW, Pd, Max, Supercollider, ...)
+All the MIDI messages received on the client will be forwarded to the server, which will then retransmit them to all connected clients except the sender. Locally, the client spawns a virtual MIDI device to allow easy connection with any compatible MIDI app (DAW, Pd, Max, SuperCollider, ...)
 
 ![Midi Hub Diagram 2](midi-hub-diagram-2.jpg)
 
@@ -17,7 +17,7 @@ If you want to kickstart and run it, just download the binaries and execute them
 
 ### Binaries
 
-On the _dist_ folder you have the binaries for Mac (Mojave or higher) and Windows.
+In the _dist_ folder you will find the binaries for macOS (Mojave or higher) and Windows.
 
 Check instructions for the Windows Client, as it needs extra care.
 
@@ -43,33 +43,32 @@ pipenv run python client.py
 ```
 
 #### Windows Client
-Is not supported to spawn Virtual Midi ports on Windows without the use of third party application. I've found a workaround using [loopMidi](http://www.tobias-erichsen.de/software/loopmidi.html).
+Windows does not support spawning virtual MIDI ports without a third-party application. A workaround is to use [loopMidi](http://www.tobias-erichsen.de/software/loopmidi.html).
 
-Once installed, open loopMidi and remove any existing ports, then add the ports as shown on this image:
+Once installed, open loopMidi and remove any existing ports, then add the ports as shown in this image:
 
 ![loopMidi Setup](loopMidi-setup.jpg)
 
-And then setup your DAW/Audio MIDI ports as similar to this:
+Then configure your DAW/Audio MIDI ports similar to this:
 
 ![Ableton MIDI Setup](ableton-midi-setup.jpg)
 
-Don't be fooled by inputs and output _dislexia_, If doesn't work at the first time, just switch to the opposite on you application.
+Don't be confused by input/output _dyslexia_. If it doesn't work at first, try switching to the opposite in your application.
 
-The client "autoguess" if it's ran on Windows OS, to switch to this specific configuration.
+The client automatically detects if it's running on Windows and switches to this specific configuration.
 
-Check the 'Development instructions' below if you prefer to not run the binaries and use python to setup your environment accordingly.
+Check the 'Development' section below if you prefer not to run the binaries and want to set up your Python environment manually.
 
 
 ### Server
 
-By default it runs on the port 8141 and listen to 0.0.0.0
+By default, the server runs on port 8141 and listens on 0.0.0.0.
 
-The server it can also be run on docker
+The server can also be run using Docker:
 
-```
+```bash
 docker build -t network-midi-hub-server .
-docker run -p8141:8141 --rm network-midi-hub-server
-
+docker run -p 8141:8141 --rm network-midi-hub-server
 ```
 
 ## Development
@@ -88,62 +87,63 @@ pipenv sync && pipenv shell
 
 To update the requirements you can modify the Pipfile and run
 
-```
-pipenv lock --python 3.8 -d
+```bash
+pipenv lock --python 3.9 -d
 pipenv requirements > requirements.txt
 pipenv requirements --dev-only > requirements-dev.txt
 ```
 
 ### pyinstaller
 
-#### OSX / Linux:
+#### macOS / Linux:
 
 Linux specific:
 
-```
-# install pyenv build dependencies
-sudo apt-get install -y build-essential libssl-dev zlib1g-dev libbz2-dev \ -->
+```bash
+# Install pyenv build dependencies
+sudo apt-get install -y build-essential libssl-dev zlib1g-dev libbz2-dev \
 libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev \
-xz-utils tk-dev libffi-dev liblzma-dev python-openssl git
+xz-utils tk-dev libffi-dev liblzma-dev git
 
-# asound libjack libraries
+# Install ALSA and JACK libraries
 sudo apt install libasound2-dev libjack-dev
 ```
 
-Setup a Python that has CPython shared-library enabled:
+Set up a Python environment with CPython shared-library enabled:
 
-```
-env PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install 3.8.6
+```bash
+env PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install 3.9.5
 ```
 
-go inside the the environment:
-```
+Activate the environment and install dependencies:
+```bash
 pipenv sync --dev
 ```
 
-create an executable of the client and server:
-```
+Create executables for the client and server:
+```bash
 pipenv run pyinstaller -F --noconfirm --hiddenimport mido.backends.rtmidi client.py
 pipenv run pyinstaller -F --noconfirm --hiddenimport mido.backends.rtmidi server.py
 ```
 
 #### Windows 10
 
-Install pyenv-win and pipenv
-Setup a Python that has CPython shared-library enabled:
-```
+Install pyenv-win and pipenv.
+
+Set up a Python environment with CPython shared-library enabled:
+```cmd
 set PYTHON_CONFIGURE_OPTS '--enable-shared'
-pyenv install 3.8.6
+pyenv install 3.9.5
 ```
 
-go inside the environment, install modules:
-```
-py -m pipenv --python /Users/Shadow/.pyenv/pyenv-win/versions/3.8.6/python3.exe shell
-pip install -r .\requirements-dev.txt
+Activate the environment and install modules:
+```cmd
+py -m pipenv --python %USERPROFILE%\.pyenv\pyenv-win\versions\3.9.5\python.exe shell
+pip install -r requirements-dev.txt
 ```
 
-To create the Windows executable is the same command
+Create the Windows executable:
 
-```
+```cmd
 pyinstaller -F --noconfirm --hiddenimport mido.backends.rtmidi client.py
 ```
