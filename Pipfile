@@ -6,15 +6,13 @@ name = "pypi"
 [packages]
 "mido" = "*"
 "python-rtmidi" = "*"
-"argparse" = "*"
 
 [requires]
-python_version = "3.9"
+python_version = "3.11"
 
 [dev-packages]
 "flake8" = "*"
 "pylint" = "*"
-"pyinstaller" = ">=5.13.1,<6.0"
+"pyinstaller" = ">=6.16.0"
 "pytest" = "*"
-"macholib" = "*"
-"setuptools" = ">=70.0.0"
+"setuptools" = ">=80.0.0"
