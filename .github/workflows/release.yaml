@@ -51,7 +51,7 @@ jobs:
           libncurses5-dev libncursesw5-dev xz-utils tk-dev libffi-dev \
           liblzma-dev git
           sudo apt install libasound2-dev libjack-dev
-          sudo apt install pipenv
+          pip install pipenv
       - name: Setup environment and dependencies
         run: |
           export PATH="$HOME/.pyenv/bin:$PATH"
