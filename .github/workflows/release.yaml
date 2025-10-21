@@ -20,7 +20,7 @@ jobs:
           brew install pyenv pipenv
       - name: Setup environment and dependencies
         run: |
-          env PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install 3.8.9
+          env PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install 3.9.5
           pipenv sync --dev
       - name: Create binaries
         run: |

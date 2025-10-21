@@ -9,11 +9,12 @@ name = "pypi"
 "argparse" = "*"
 
 [requires]
-python_full_version = "3.8"
+python_version = "3.9"
 
 [dev-packages]
 "flake8" = "*"
 "pylint" = "*"
-"pyinstaller" = "*"
+"pyinstaller" = ">=5.13.1"
 "pytest" = "*"
 "macholib" = "*"
+"setuptools" = ">=70.0.0"
