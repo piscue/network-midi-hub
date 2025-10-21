@@ -9,7 +9,7 @@ on:
 # Build on the oldest supported images, so we have broader compatibility
 jobs:
   macOS:
-    runs-on: macos-12
+    runs-on: macos-13
     steps:
       - uses: actions/checkout@v4
         with:
@@ -38,7 +38,7 @@ jobs:
           if-no-files-found: error
 
   linux:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
         with:
@@ -106,7 +106,7 @@ jobs:
 
   publish:
     needs: [linux,  macOS, windows]
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     permissions:
       contents: write
     steps:
