@@ -14,7 +14,7 @@ python_version = "3.9"
 [dev-packages]
 "flake8" = "*"
 "pylint" = "*"
-"pyinstaller" = ">=5.13.1,<6.0"
+"pyinstaller" = ">=5.13.1,<7.0"
 "pytest" = "*"
 "macholib" = "*"
 "setuptools" = ">=70.0.0"
