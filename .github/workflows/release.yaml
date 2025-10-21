@@ -110,6 +110,7 @@ jobs:
     permissions:
       contents: write
     steps:
+      - uses: actions/checkout@v4
       - uses: actions/download-artifact@v4
       - if: github.event_name == 'workflow_dispatch'
         run: echo "TAG_NAME=${{ github.event.inputs.tag_name }}" >> $GITHUB_ENV
@@ -128,11 +129,10 @@ jobs:
       - if: env.TAG_NAME != github.head_ref
         run: echo 'SUBJECT=network-midi-hub release build' >> $GITHUB_ENV
       - if: env.TAG_NAME == github.head_ref
-        uses: dev-drprasad/delete-tag-and-release@v0.2.1
-        with:
-          tag_name: nightly
-          delete_release: true
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release delete nightly --yes --cleanup-tag || true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - uses: meeDamian/github-release@2.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
