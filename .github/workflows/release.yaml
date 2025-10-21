@@ -128,12 +128,11 @@ jobs:
       - if: env.TAG_NAME != github.head_ref
         run: echo 'SUBJECT=network-midi-hub release build' >> $GITHUB_ENV
       - if: env.TAG_NAME == github.head_ref
-        uses: dev-drprasad/delete-tag-and-release@v0.1.2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: dev-drprasad/delete-tag-and-release@v0.2.1
         with:
-          delete_release: true
           tag_name: nightly
+          delete_release: true
+          github_token: ${{ secrets.GITHUB_TOKEN }}
       - uses: meeDamian/github-release@2.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
