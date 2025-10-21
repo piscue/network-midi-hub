@@ -24,8 +24,8 @@ jobs:
           pipenv sync --dev
       - name: Create binaries
         run: |
-          pipenv run pyinstaller -F --noconfirm --hiddenimport mido.backends.rtmidi client.py
-          pipenv run pyinstaller -F --noconfirm --hiddenimport mido.backends.rtmidi server.py
+          pipenv run pyinstaller -F --noconfirm --exclude-module pytest --hiddenimport mido.backends.rtmidi client.py
+          pipenv run pyinstaller -F --noconfirm --exclude-module pytest --hiddenimport mido.backends.rtmidi server.py
       - name: Upload binaries
         run: |
           cd dist
@@ -61,8 +61,8 @@ jobs:
           pipenv sync --dev
       - name: Create binaries
         run: |
-          pipenv run pyinstaller -F --noconfirm --hiddenimport mido.backends.rtmidi client.py
-          pipenv run pyinstaller -F --noconfirm --hiddenimport mido.backends.rtmidi server.py
+          pipenv run pyinstaller -F --noconfirm --exclude-module pytest --hiddenimport mido.backends.rtmidi client.py
+          pipenv run pyinstaller -F --noconfirm --exclude-module pytest --hiddenimport mido.backends.rtmidi server.py
       - name: Upload binaries
         run: |
           cd dist
@@ -91,8 +91,8 @@ jobs:
           pipenv run pip install -r requirements-dev.txt
       - name: Create binaries
         run: |
-          pipenv run pyinstaller -F --noconfirm --hiddenimport mido.backends.rtmidi client.py
-          pipenv run pyinstaller -F --noconfirm --hiddenimport mido.backends.rtmidi server.py
+          pipenv run pyinstaller -F --noconfirm --exclude-module pytest --hiddenimport mido.backends.rtmidi client.py
+          pipenv run pyinstaller -F --noconfirm --exclude-module pytest --hiddenimport mido.backends.rtmidi server.py
       - name: Upload binaries
         run: |
           cd dist
