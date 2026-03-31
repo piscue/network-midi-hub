@@ -9,15 +9,14 @@ on:
 # Build on the oldest supported images, so we have broader compatibility
 jobs:
   macOS:
-    runs-on: macos-13
+    runs-on: macos-26
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - name: Install brew packages
         run: |
-          brew install pyenv
-          pip3 install pipenv
+          brew install pyenv pipenv
       - name: Setup environment and dependencies
         run: |
           env PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install 3.11.13
