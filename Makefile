@@ -1,3 +1,3 @@
 test:
 	flake8 *py
-	python3.8 -m pytest
+	python3.14 -m pytest
