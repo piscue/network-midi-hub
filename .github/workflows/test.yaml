@@ -1,0 +1,43 @@
+name: Test
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  lint-and-unit:
+    name: Lint & unit tests
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install system dependencies
+        run: sudo apt-get install -y libasound2-dev libjack-dev
+
+      - name: Install Python dependencies
+        run: pip install flake8 pytest mido python-rtmidi
+
+      - name: Lint
+        run: flake8 client.py server.py
+
+      - name: Unit tests
+        run: pytest tests/test_client.py tests/test_server.py -v
+
+  e2e:
+    name: E2E tests (client ↔ server ↔ client)
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: E2E tests
+        run: pytest tests/test_e2e.py -v
