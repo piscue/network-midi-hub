@@ -1,3 +1,4 @@
+import os
 import re
 import time
 import types
@@ -17,19 +18,20 @@ def get_args():
     parser.add_argument('--thru', '-t', action='store_true')
     parser.add_argument('--host', default='127.0.0.1')
     parser.add_argument('--port', '-p', default=8141, type=int)
-    parser.parse_args()
     return parser.parse_args()
 
 
 def start_connection(host, port):
-    print(f'connecting to {host} on port {port}...', end='')
+    print(f'connecting to {host} on port {port}...')
     server_addr = (host, port)
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.setsockopt(socket.SOL_SOCKET, socket.SO_KEEPALIVE, 1)
     sock.setblocking(False)
     sock.connect_ex(server_addr)
     events = selectors.EVENT_READ | selectors.EVENT_WRITE
-    sel.register(sock, events)
-    print('connected')
+    # Track whether the non-blocking connect has been verified (#18)
+    data = types.SimpleNamespace(connected=False)
+    sel.register(sock, events, data=data)
     return sock
 
 
@@ -86,6 +88,9 @@ def receive_messages(sock, output_msgs):
     recv_data = sock.recv(1024)
     if recv_data:
         output_msgs = parse_received_data(recv_data, output_msgs)
+    else:
+        # Empty recv means the server closed the connection (#16)
+        raise ConnectionResetError('server closed connection')
     return output_msgs
 
 
@@ -101,6 +106,17 @@ def send_message(msg, data, sock):
 def server_con(key, mask, send_msgs, output_msgs):
     sock = key.fileobj
     data = key.data
+    # Verify the non-blocking connect completed successfully (#18)
+    if not data.connected:
+        if mask & selectors.EVENT_WRITE:
+            err = sock.getsockopt(socket.SOL_SOCKET, socket.SO_ERROR)
+            if err != 0:
+                raise ConnectionRefusedError(
+                    f'connection failed: {os.strerror(err)}'
+                )
+            data.connected = True
+            print('connected')
+        return output_msgs
     if mask & selectors.EVENT_READ:
         output_msgs = receive_messages(sock, output_msgs)
     if mask & selectors.EVENT_WRITE:
@@ -131,8 +147,8 @@ def open_midi_ports():
     return input_midi, output_midi
 
 
-def main():
-    input_midi, output_midi = open_midi_ports()
+def main(midi_port_factory=None):
+    input_midi, output_midi = (midi_port_factory or open_midi_ports)()
     args = get_args()
     if args.host == '127.0.0.1':
         args.host = input('Server to connect [127.0.0.1]: ') or '127.0.0.1'
