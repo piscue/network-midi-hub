@@ -1,8 +1,5 @@
 FROM python:3.14
-ADD requirements.txt /
-RUN pip install -r /requirements.txt \
- && rm /requirements.txt \
- && mkdir -p /app
+RUN mkdir -p /app
 ADD server.py /app
 WORKDIR /app
 HEALTHCHECK CMD ["python", "-V"]
