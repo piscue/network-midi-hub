@@ -8,6 +8,17 @@ import traceback
 
 sel = selectors.DefaultSelector()
 
+# HTTP request methods — data starting with one of these is not MIDI (#10)
+_HTTP_METHODS = (
+    b'GET ', b'POST ', b'HEAD ', b'PUT ', b'DELETE ',
+    b'PATCH ', b'OPTIONS ', b'CONNECT ', b'TRACE ',
+)
+
+
+def looks_like_http(data: bytes) -> bool:
+    """Return True if data looks like an HTTP request rather than MIDI."""
+    return bool(data) and any(data.startswith(m) for m in _HTTP_METHODS)
+
 
 def get_args():
     parser = argparse.ArgumentParser(description='Get vars')
@@ -20,7 +31,7 @@ def accept_wrapper(sock, sockets):
     conn, addr = sock.accept()
     print("accepted connection from", addr)
     conn.setblocking(False)
-    data = types.SimpleNamespace(addr=addr, inb=b"", outb=b"")
+    data = types.SimpleNamespace(addr=addr, inb=b"", outb=b"", validated=False)
     events = selectors.EVENT_READ | selectors.EVENT_WRITE
     sel.register(conn, events, data=data)
     sockets.append(conn)
@@ -45,6 +56,16 @@ def send_to_mix_minus(sock, sockets, data):
     return data
 
 
+def _close_connection(sock, data, sockets):
+    """Unregister and close a client socket, removing it from the pool."""
+    print("closing connection to", data.addr)
+    sel.unregister(sock)
+    sock.close()
+    if sock in sockets:
+        sockets.remove(sock)
+    return sockets
+
+
 def service_connection(key, mask, sockets):
     sock = key.fileobj
     data = key.data
@@ -53,15 +74,16 @@ def service_connection(key, mask, sockets):
         try:
             recv_data = sock.recv(1024)  # Should be ready to read
             if recv_data:
-                # not acumulating data, just keeping the latest
+                # Reject non-MIDI connections on first data received (#10)
+                if not data.validated:
+                    if looks_like_http(recv_data):
+                        print("dropping non-MIDI connection from", data.addr)
+                        return _close_connection(sock, data, sockets)
+                    data.validated = True
+                # not accumulating data, just keeping the latest
                 data.outb = recv_data
             else:
-                print("closing connection to", data.addr)
-                sel.unregister(sock)
-                sock.close()
-                # remove from the pool of clients
-                if sock in sockets:
-                    sockets.remove(sock)
+                sockets = _close_connection(sock, data, sockets)
         except ConnectionResetError:
             print(traceback.format_exc())
     # send
@@ -76,6 +98,7 @@ def main():
     vars = get_args()
     host, port = vars.bind, vars.port
     lsock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    lsock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     lsock.bind((host, port))
     lsock.listen()
     print("listening on", (host, port))
