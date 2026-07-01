@@ -5,5 +5,5 @@ RUN pip install -r /requirements.txt \
  && mkdir -p /app
 ADD server.py /app
 WORKDIR /app
-HEALTHCHECK CMD ["/usr/bin/python", "-V"]
+HEALTHCHECK CMD ["python", "-V"]
 ENTRYPOINT ["python", "/app/server.py"]
