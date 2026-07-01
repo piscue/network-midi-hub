@@ -23,12 +23,13 @@ On each client machine, the client spawns a virtual MIDI port so any local MIDI 
 
 ## Quickstart — binaries (recommended)
 
-Download the latest binaries from the [Releases](https://github.com/piscue/network-midi-hub/releases) page. Each release ships self-contained executables for macOS, Linux, and Windows — no Python or pip needed.
+Download the latest binaries from the [Releases](https://github.com/piscue/network-midi-hub/releases) page. Each release ships self-contained executables — no Python or pip needed.
 
 ```
-network-midi-hub-osx.tgz     → client, server
-network-midi-hub-linux.tgz   → client, server
-network-midi-hub-windows.tgz → client.exe, server.exe
+network-midi-hub-osx.tgz          → client, server          (macOS)
+network-midi-hub-linux.tgz        → client, server          (Linux x86-64)
+network-midi-hub-linux-arm64.tgz  → client, server          (Linux arm64 — Raspberry Pi 3/4/5, ARM desktops/servers, AWS Graviton, etc.)
+network-midi-hub-windows.tgz      → client.exe, server.exe  (Windows)
 ```
 
 Start the server on any always-on machine:
