@@ -29,7 +29,7 @@ jobs:
         run: |
           cd dist
           tar czvf network-midi-hub-osx.tgz client server
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: network-midi-hub-osx
           path: dist/*.tgz
@@ -66,7 +66,7 @@ jobs:
         run: |
           cd dist
           tar czvf network-midi-hub-linux.tgz client server
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: network-midi-hub-linux
           path: dist/*.tgz
@@ -96,7 +96,7 @@ jobs:
         run: |
           cd dist
           tar czvf network-midi-hub-windows.tgz *.exe
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: network-midi-hub-windows
           path: dist/*.tgz
