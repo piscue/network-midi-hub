@@ -73,6 +73,43 @@ jobs:
           retention-days: 1
           if-no-files-found: error
 
+  linux-arm:
+    runs-on: ubuntu-24.04-arm
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: Install packages
+        run: |
+          curl https://pyenv.run | bash
+          sudo apt-get install -y build-essential libssl-dev zlib1g-dev \
+          libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm \
+          libncurses5-dev libncursesw5-dev xz-utils tk-dev libffi-dev \
+          liblzma-dev git
+          sudo apt install libasound2-dev libjack-dev
+          pip install pipenv
+      - name: Setup environment and dependencies
+        run: |
+          export PATH="$HOME/.pyenv/bin:$PATH"
+          eval "$(pyenv init -)"
+          eval "$(pyenv virtualenv-init -)"
+          env PYTHON_CONFIGURE_OPTS="--enable-shared" pyenv install 3.14.3
+          pipenv sync --dev
+      - name: Create binaries
+        run: |
+          pipenv run pyinstaller -F --noconfirm --exclude-module pytest --hiddenimport mido.backends.rtmidi client.py
+          pipenv run pyinstaller -F --noconfirm --exclude-module pytest --hiddenimport mido.backends.rtmidi server.py
+      - name: Upload binaries
+        run: |
+          cd dist
+          tar czvf network-midi-hub-linux-arm64.tgz client server
+      - uses: actions/upload-artifact@v7
+        with:
+          name: network-midi-hub-linux-arm64
+          path: dist/*.tgz
+          retention-days: 1
+          if-no-files-found: error
+
   windows:
     runs-on: windows-latest
     steps:
@@ -104,7 +141,7 @@ jobs:
           if-no-files-found: error
 
   publish:
-    needs: [linux,  macOS, windows]
+    needs: [linux, linux-arm, macOS, windows]
     runs-on: ubuntu-22.04
     permissions:
       contents: write
@@ -143,6 +180,7 @@ jobs:
           allow_override: ${{ env.TAG_NAME == github.head_ref }}
           files: |
             network-midi-hub-linux.tgz:./network-midi-hub-linux/network-midi-hub-linux.tgz
+            network-midi-hub-linux-arm64.tgz:./network-midi-hub-linux-arm64/network-midi-hub-linux-arm64.tgz
             network-midi-hub-osx.tgz:./network-midi-hub-osx/network-midi-hub-osx.tgz
             network-midi-hub-windows.tgz:./network-midi-hub-windows/network-midi-hub-windows.tgz
           body: |
