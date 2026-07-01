@@ -39,5 +39,8 @@ jobs:
         with:
           python-version: '3.12'
 
+      - name: Install Python dependencies
+        run: pip install pytest
+
       - name: E2E tests
         run: pytest tests/test_e2e.py -v
