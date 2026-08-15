@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "834018c7baf24fbdd67d97ffec9462156063bb9500b2ecd8ec8891dc0056bca9"
+            "sha256": "63734301bcdb4d3d4f971c82fed21ccc16ae4e612d3363ee93c963c1c37462dd"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -134,11 +134,11 @@
         },
         "packaging": {
             "hashes": [
-                "sha256:5fc45236b9446107ff2415ce77c807cee2862cb6fac22b8a73826d0693b0980e",
-                "sha256:ff452ff5a3e828ce110190feff1178bb1f2ea2281fa2075aadb987c2fb221661"
+                "sha256:94edc256424af38762eb31306eed28beb9f0efc50a8837492c9d6fd6004aed79",
+                "sha256:d7193f7c8e4e93f444fde0262bf90af30e16fa0ad0ad44cb553c87339b23cd1c"
             ],
-            "markers": "python_version >= '3.8'",
-            "version": "==26.2"
+            "markers": "python_version >= '3.9'",
+            "version": "==26.3"
         },
         "platformdirs": {
             "hashes": [
@@ -182,22 +182,22 @@
         },
         "pyinstaller": {
             "hashes": [
-                "sha256:327d132389f37912609e01be62810cf96b5aa95b613903e4b8692e0d12fb0eda",
-                "sha256:42395ec76df8e8120c36b13339d9db8cab83e316a12839ee303cc00fc941bb74",
-                "sha256:4e3108b3f02384560da70e39b8bf22b0ad597d02bd68a40d76ea91c1cfa00cad",
-                "sha256:5fa56746c1e76f93634d018502301378a2d0c382553d37d8c3c34ff436c12dd1",
-                "sha256:605169523a6b5ace39f13dfbff21add9f2bc43df99c7daf9394fefb2c45e8b6f",
-                "sha256:697532279f535ad572bda613db4f821540e235c7854ca6da4d3bf0373f4415ee",
-                "sha256:6b6374d652107dd4a2eeece903ff82bb4045bb5e1006c5a158a6dcdbefe84bf2",
-                "sha256:7071d4b094d5b40deeef5fa3d3b98a1b846087f7562b49209663d5f9281fe251",
-                "sha256:7fae06c494ce0ebfe6bd3055c0e409def884f63af2e3705d06bd431ad9237fc7",
-                "sha256:bb9fab705983e393a2d1cac77d6972513057ad800215fd861dc15ff5272e98fd",
-                "sha256:c6b28d30d8fd99ce162ff3aab5013ed44dbfb747566b1f01b9bed7964d7c14e9",
-                "sha256:f13c95c9c03fb567217135919f93815c305813126780b0ed6e0123cb8acaf025"
+                "sha256:0a20c37761851100f422ec261f513f46d8e57100ea22886b9ff7a6c346104bd8",
+                "sha256:6e5f3656de100954bf5db25536c43e097e46d482843a96d03a0852bf266e4853",
+                "sha256:6f527c1345d5010682587aebc2f0c1cc34a9b1f200424969c7bfda723cddc074",
+                "sha256:7885de3c830356b0990b27fe164f2b008fb4a18560bac884cf33985f61469f44",
+                "sha256:81dc305c16510c1f9ead6d115b66f381e3d3453ecb96653099c51aa3050420d1",
+                "sha256:8b0166fff4583b374bbe7fa044bf03ddc33cab0f792a665807d96048e63f060e",
+                "sha256:b07ac9fd1d661ae4d0af6752c3941e4e5576a16cfe7e2d6504a32d57e17d0acc",
+                "sha256:b1233da63926be213cdfbfbb314735bc7762136ed772b1082e1b0a2d7ed896b5",
+                "sha256:d7c7c5b149f7f9b37585b37e2376f774038b6a5633ba34db0de2698f75391e13",
+                "sha256:e6859e80b9c7dccb8a1687c5ed4644a722b370c2aa13e8a9ca5ebf5f9bb842ce",
+                "sha256:f6c750c8ae999cc5520ddbce4263ac3ece96db04ba359ef20acacd81bccc201b",
+                "sha256:f92f78a9c463b884d57f90c7459c0cb263ccd26a499356bbfac7a5f41fd5b93f"
             ],
             "index": "pypi",
             "markers": "python_version < '3.16' and python_version >= '3.8'",
-            "version": "==6.21.0"
+            "version": "==6.22.0"
         },
         "pyinstaller-hooks-contrib": {
             "hashes": [
@@ -227,12 +227,12 @@
         },
         "setuptools": {
             "hashes": [
-                "sha256:025bccbbf0fa05b6192bc64ae1e7b16e001fd6d6d4d5de03c97b1c1ade523bef",
-                "sha256:29b23c360f22f414dc7336bb39178cc7bcbf6021ed2733cde173f09dba19abb3"
+                "sha256:51a52592b3b99e102b609654876bd65f19f999935166d1352678931132b0c670",
+                "sha256:f4695c21257f0d9b537ec2692c941d02ee143b7cc1276941349a546573b2ef73"
             ],
             "index": "pypi",
             "markers": "python_version >= '3.10'",
-            "version": "==83.0.0"
+            "version": "==84.0.0"
         },
         "tomlkit": {
             "hashes": [
