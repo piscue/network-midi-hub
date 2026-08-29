@@ -2,5 +2,5 @@
 flake8==7.3.0
 pylint==4.0.7
 pytest==9.1.1
-pyinstaller==6.21.0
+pyinstaller==6.22.2
 setuptools==84.0.0
