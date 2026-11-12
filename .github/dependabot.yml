@@ -4,6 +4,15 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+    # Action bumps are direct:production, so this group follows the production
+    # level (patch). Only patch bumps travel together; minors and majors stay
+    # on their own PR.
+    groups:
+      actions:
+        patterns:
+          - "*"
+        update-types:
+          - "patch"
 
   - package-ecosystem: "docker"
     directory: "/"
@@ -14,3 +23,28 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+    # Small bumps arrive together instead of one PR per package. This repo's
+    # auto-merge policy is `none`, so nothing auto-merges here yet and every
+    # bump waits for review anyway: grouping is PR batching, not auto-merge,
+    # and a patch-only group is the most conservative shape to hand to a
+    # reviewer. Minors and majors stay on their own PR.
+    #
+    # The pip manifests do split by file name (requirements.txt is production,
+    # requirements-dev.txt is development, plus the Pipfile), but both sides
+    # carry the same level here, so one group cannot mix two different
+    # ceilings. If a distinct automerge_dev is ever set, this must be split
+    # into prod-patches and dev-patches.
+    #
+    # Packages that are never auto-merged stay out of the group, so they keep
+    # their own PR.
+    groups:
+      patches:
+        patterns:
+          - "*"
+        update-types:
+          - "patch"
+        exclude-patterns:
+          - "django"
+          - "django-allauth"
+          - "cryptography"
+          - "pyjwt"
